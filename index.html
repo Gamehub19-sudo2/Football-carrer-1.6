@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Football Career 1.4 — Modo Difícil e Luxo</title>
+<style>
+:root{--bg:#08111f;--panel:#111f32;--panel2:#172941;--text:#eef5ff;--muted:#9db0c9;--green:#49e09b;--gold:#ffd166;--line:#2a3e59}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#142b44,var(--bg) 60%);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:26px 18px 18px;text-align:center;border-bottom:1px solid var(--line)}h1{margin:0;font-size:clamp(26px,5vw,42px)}header p{margin:8px auto 0;color:var(--muted);max-width:700px}
+main{max-width:1100px;margin:auto;padding:18px;display:grid;gap:16px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat,.panel{background:linear-gradient(145deg,var(--panel),#0d1929);border:1px solid var(--line);border-radius:16px;padding:16px}.stat span{display:block;color:var(--muted);font-size:13px}.stat strong{font-size:25px}.layout{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.panel h2{margin:0 0 12px;font-size:21px}.muted{color:var(--muted)}label{display:block;margin:10px 0 5px;color:var(--muted);font-size:14px}input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#091525;color:var(--text);font:inherit}button{border:0;border-radius:10px;padding:11px 14px;background:var(--green);color:#062116;font-weight:800;font:inherit;cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.pill{display:inline-block;padding:5px 9px;border:1px solid var(--line);border-radius:99px;color:var(--muted);font-size:12px;margin:2px}.contract{padding:13px;border:1px solid var(--line);border-radius:12px;background:#0b1727;margin:9px 0}.contract h3{margin:0 0 5px}.contract p{margin:5px 0;color:var(--muted);font-size:14px}.contract button{margin-top:7px}.bar{height:9px;background:#26384e;border-radius:99px;overflow:hidden;margin-top:8px}.bar div{height:100%;background:var(--green);width:0%}#message{min-height:24px;color:var(--gold);margin-top:8px}.teamlist{display:flex;flex-wrap:wrap;gap:5px;max-height:240px;overflow:auto}.teamlist .pill{color:var(--text)}.small{font-size:13px}.careerlog{max-height:180px;overflow:auto;padding-left:20px;color:var(--muted)}footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}
+@media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}main{padding:12px}.stat strong{font-size:22px}}
+</style></head>
+<body>
+<header><h1>⚽ Football Career 1.4</h1><p>Modo muito difícil: evolua lentamente, conquiste contratos e acumule fortuna para comprar mansões, ilhas, carros, iates e jatos.</p></header>
+<main>
+<section class="stats">
+<div class="stat"><span>Fama</span><strong id="fame">0</strong><div class="bar"><div id="famebar"></div></div></div>
+<div class="stat"><span>Overall</span><strong id="ovr">55</strong></div>
+<div class="stat"><span>Saldo</span><strong id="cash">R$ 0</strong></div>
+<div class="stat"><span>Clube atual</span><strong id="club" style="font-size:18px">Sem clube</strong></div>
+</section>
+<section class="layout">
+<div class="panel">
+<h2>👤 Seu jogador</h2>
+<label>Nome do jogador</label><input id="playerName" maxlength="28" value="Novo Craque">
+<label>Posição</label><select id="position"><option>Atacante</option><option>Meia</option><option>Ponta</option><option>Volante</option><option>Zagueiro</option><option>Goleiro</option></select>
+<label>Escolha uma competição para procurar clubes</label><select id="league"><option value="all">Todas as ligas</option><option>Brasileirão Série A</option><option>Brasileirão Série B</option><option>Brasileirão Série C</option><option>Brasileirão Série D</option><option>La Liga</option><option>Premier League</option><option>Liga Saudita</option><option>Seleções</option></select>
+<div class="row"><button id="play">⚽ Jogar partida</button><button class="secondary" id="train">💪 Treinar (R$ 1.000)</button><button class="secondary" id="offer">📩 Buscar contratos</button><button class="secondary" id="reset">↻ Reiniciar progresso</button></div>
+<div id="message" aria-live="polite">Sua carreira começa agora. Jogue sua primeira partida!</div>
+<h2 style="margin-top:20px">📊 Histórico da carreira</h2><ul class="careerlog" id="log"><li>Você assinou como agente livre e começou com 0 de Fama.</li></ul>
+</div>
+<div class="panel">
+<h2>📩 Contratos recebidos</h2><p class="muted small">As propostas dependem da sua Fama e Overall. Clubes maiores só aparecem quando você cumprir os requisitos. Treinar custa R$ 1.000.</p>
+<div id="contracts"><p class="muted">Jogue partidas ou busque contratos para receber propostas.</p></div>
+</div>
+</section>
+
+<section class="panel"><h2>🏝️ Vida de luxo — Loja de patrimônio</h2>
+<p class="muted small">Compre bens de luxo usando o dinheiro da carreira. Itens caros são objetivos de longo prazo!</p>
+<div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+<div class="contract"><h3>🏠 Mansão</h3><p>R$ 25.000.000</p><button data-buy="mansao" type="button">Comprar</button></div>
+<div class="contract"><h3>🏝️ Ilha particular</h3><p>R$ 500.000.000</p><button data-buy="ilha" type="button">Comprar</button></div>
+<div class="contract"><h3>🚗 Supercarro</h3><p>R$ 8.000.000</p><button data-buy="carro" type="button">Comprar</button></div>
+<div class="contract"><h3>🏎️ Coleção de carros</h3><p>R$ 75.000.000</p><button data-buy="colecao" type="button">Comprar</button></div>
+<div class="contract"><h3>🛥️ Iate de luxo</h3><p>R$ 120.000.000</p><button data-buy="iate" type="button">Comprar</button></div>
+<div class="contract"><h3>🛩️ Jato particular</h3><p>R$ 250.000.000</p><button data-buy="jato" type="button">Comprar</button></div>
+</div><h3>Seus patrimônios</h3><div id="assets" class="teamlist"></div>
+</section>
+\n<section class="panel"><h2>🌍 Clubes e seleções no universo do jogo</h2><p class="muted small">A lista abaixo reúne clubes e seleções para gerar contratos. Para evitar travar o jogo, as propostas aparecem em grupos aleatórios conforme sua Fama.</p><div class="teamlist" id="teams"></div><p class="muted small">Nota: os elencos e divisões mudam a cada temporada; esta versão é uma base jogável e pode não refletir todas as inscrições oficiais da temporada atual.</p></section>
+</main><footer>Football Career • Protótipo jogável em HTML • Progresso salvo neste navegador</footer>
+<script>
+const clubs={
+"Brasileirão Série A":["Flamengo","Palmeiras","Botafogo","Atlético-MG","São Paulo","Corinthians","Fluminense","Grêmio","Internacional","Santos","Cruzeiro","Bahia","Athletico-PR","Fortaleza","Vasco","Bragantino","Cuiabá","Goiás","Coritiba","América-MG"],
+"Brasileirão Série B":["Sport","Ceará","Santos","Novorizontino","Mirassol","Vila Nova","Goiás","América-MG","Coritiba","Avaí","CRB","Operário-PR","Amazonas","Paysandu","Ponte Preta","Botafogo-SP","Ituano","Brusque","Chapecoense","Guarani"],
+"Brasileirão Série C":["Náutico","Remo","Figueirense","ABC","Londrina","Ypiranga-RS","São Bernardo","Volta Redonda","Ferroviária","Confiança","CSA","Caxias","Aparecidense","Sampaio Corrêa","Tombense","Botafogo-PB","Ferroviário-CE","Floresta","Athletic Club","São José-RS"],
+"Brasileirão Série D":["Retrô","Anápolis","Itabaiana","Manauara","Portuguesa-RJ","Maringá","Inter de Limeira","Água Santa","Brasiliense","Ceilândia","Trem","Altos","Moto Club","Juazeirense","ASA","Central","Nova Iguaçu","Real Noroeste","Hercílio Luz","São Raimundo-RR"],
+"La Liga":["Real Madrid","Barcelona","Atlético de Madrid","Athletic Club","Real Sociedad","Real Betis","Villarreal","Valencia","Sevilla","Girona","Osasuna","Getafe","Celta de Vigo","Rayo Vallecano","Mallorca","Las Palmas","Espanyol","Leganés","Alavés","Valladolid"],
+"Premier League":["Manchester City","Arsenal","Liverpool","Manchester United","Chelsea","Tottenham","Newcastle United","Aston Villa","Brighton","West Ham","Crystal Palace","Fulham","Brentford","Wolverhampton","Everton","Nottingham Forest","Bournemouth","Leicester City","Ipswich Town","Southampton"],
+"Liga Saudita":["Al-Hilal","Al-Nassr","Al-Ittihad","Al-Ahli","Al-Ettifaq","Al-Shabab","Al-Qadsiah","Al-Taawoun","Al-Fateh","Al-Riyadh","Neom SC","Al-Kholood"],
+"Seleções":["Brasil","Argentina","França","Inglaterra","Espanha","Portugal","Alemanha","Itália","Holanda","Bélgica","Uruguai","Colômbia","Croácia","Marrocos","Japão","Estados Unidos","México","Senegal","Nigéria","Coreia do Sul","Canadá","Suíça","Dinamarca","Suécia","Chile","Equador","Paraguai","Austrália","Gana","Camarões"]
+};
+const allTeams=Object.entries(clubs).flatMap(([league,teams])=>teams.map(team=>({team,league})));
+let state={fame:0,ovr:55,cash:0,club:"Sem clube",matches:0,wins:0,contracts:[],assets:[],log:["Você assinou como agente livre e começou com 0 de Fama."],name:"Novo Craque",position:"Atacante",...load()};
+function load(){try{return JSON.parse(localStorage.getItem("footballCareerSave")||"{}")}catch{return {}}}
+function save(){try{localStorage.setItem("footballCareerSave",JSON.stringify(state))}catch(e){/* O jogo continua mesmo sem armazenamento disponível. */}}
+const $=id=>document.getElementById(id);
+function money(n){return "R$ "+Math.round(n).toLocaleString("pt-BR")}
+function addLog(t){state.log.unshift(t);state.log=state.log.slice(0,15)}
+function render(){ $("assets").innerHTML=(state.assets||[]).length?state.assets.map(a=>`<span class="pill">${esc(a)}</span>`).join(""):"<span class=\"muted\">Você ainda não comprou bens de luxo.</span>"; $("fame").textContent=state.fame.toLocaleString("pt-BR");$("ovr").textContent=state.ovr;$("cash").textContent=money(state.cash);$("club").textContent=state.club;$("famebar").style.width=(state.fame%100)+"%";$("log").innerHTML=state.log.map(x=>"<li>"+esc(x)+"</li>").join("");renderContracts();save()}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function level(){return Math.min(6,Math.floor(state.fame/1000))}
+const tierNames=["Brasileirão Série D","Brasileirão Série C","Brasileirão Série B","Brasileirão Série A","La Liga","Premier League","Liga Saudita","Seleções"];
+const tierRequirements=[
+ {fame:0,ovr:55},{fame:100,ovr:60},{fame:250,ovr:65},{fame:450,ovr:72},
+ {fame:700,ovr:80},{fame:1000,ovr:86},{fame:850,ovr:84},{fame:1400,ovr:91}
+];
+function candidates(){
+ const filter=$("league").value;
+ return allTeams.filter(x=>{
+  const tier=tierNames.indexOf(x.league),req=tierRequirements[tier];
+  return (filter==="all"||x.league===filter)&&x.team!==state.club&&state.fame>=req.fame&&state.ovr>=req.ovr;
+ });
+}
+function requirementMessage(){
+ const filter=$("league").value;
+ const tiers=filter==="all"?tierNames:[filter];
+ const reqs=tiers.map(l=>({league:l,req:tierRequirements[tierNames.indexOf(l)]})).filter(x=>x.req);
+ const next=reqs.find(x=>state.fame<x.req.fame||state.ovr<x.req.ovr);
+ if(!next)return "Ainda não há clubes elegíveis para oferecer contrato.";
+ const missing=[];
+ if(state.fame<next.req.fame)missing.push("Fama "+next.req.fame);
+ if(state.ovr<next.req.ovr)missing.push("Overall "+next.req.ovr);
+ return "Você ainda não está pronto para essa competição. Requisitos: "+missing.join(" e ")+".";
+}
+function generateContracts(){
+ let pool=candidates();
+ if(!pool.length){
+  state.contracts=[];
+  render();
+  $("message").textContent=requirementMessage();
+  return;
+ }
+ const picked=[];
+ while(picked.length<3&&pool.length){
+  const i=Math.floor(Math.random()*pool.length);
+  picked.push(pool.splice(i,1)[0]);
+ }
+ state.contracts=picked.map(x=>{
+  const tier=tierNames.indexOf(x.league);
+  const saudi=x.league==="Liga Saudita";
+  const weekly=Math.round((300+state.fame*9+state.ovr*12)*(saudi?3.8:(0.65+tier*0.32))*(0.8+Math.random()*0.4));
+  return {...x,weekly,bonus:weekly*(saudi? (4+Math.floor(Math.random()*5)):(1+Math.floor(Math.random()*3))),duration:1+Math.floor(Math.random()*3)};
+ });
+ addLog("Você recebeu "+picked.length+" proposta(s) de contrato.");
+ render();
+ $("message").textContent="Novas propostas chegaram! Clubes maiores exigem mais Fama e Overall.";
+}
+function renderContracts(){const el=$("contracts");if(!state.contracts.length){el.innerHTML='<p class="muted">Nenhuma proposta no momento. Jogue ou clique em “Buscar contratos”.</p>';return}el.innerHTML=state.contracts.map((c,i)=>`<div class="contract"><h3>${esc(c.team)}</h3><span class="pill">${esc(c.league)}</span><span class="pill">${c.duration} temporada(s)</span><p>Salário semanal: <b>${money(c.weekly)}</b></p><p>Bônus de assinatura: <b>${money(c.bonus)}</b></p><button type="button" data-sign="${i}">Assinar contrato</button></div>`).join("")}
+function signContract(i){const c=state.contracts[i];if(!c)return;state.club=c.team;state.cash+=c.bonus;state.contracts=[];addLog("Você assinou com "+c.team+" ("+c.league+") e recebeu bônus de "+money(c.bonus)+".");$("message").textContent="Contrato assinado! Agora represente "+c.team+".";render()}
+$("contracts").addEventListener("click",event=>{const btn=event.target.closest("button[data-sign]");if(btn)signContract(Number(btn.dataset.sign))});
+$("play").addEventListener("click",()=>{state.name=$("playerName").value.trim()||"Novo Craque";state.position=$("position").value;state.matches++;const roll=Math.random();const won=roll<Math.min(.62,.22+state.ovr/300);const draw=!won&&roll<.60;const gain=won?3+Math.floor(Math.random()*4):draw?1+Math.floor(Math.random()*3):Math.floor(Math.random()*2);state.fame+=gain;state.cash+=state.club==="Sem clube"?0:Math.round((120+state.ovr*3)*(clubs["Liga Saudita"].includes(state.club)?12:1));if(clubs["Liga Saudita"].includes(state.club)&&Math.random()<.55){const loss=2+Math.floor(Math.random()*7);state.fame=Math.max(0,state.fame-loss);addLog(`A fama caiu ${loss} pontos: a Liga Saudita paga muito, mas não dá tanta visibilidade internacional.`)}if(won){state.wins++;state.ovr=Math.min(99,state.ovr+(Math.random()<.45?1:0))}addLog(`${state.name}: ${won?"vitória":draw?"empate":"derrota"} na partida. +${gain} de Fama.`);$("message").textContent=`${won?"Vitória!":draw?"Empate.":"Derrota, mas você ganhou experiência."} +${gain} de Fama.`;if(state.matches===1||Math.random()<.35)generateContracts();else render()});
+$("train").addEventListener("click",()=>{const trainingCost=1000+Math.max(0,state.ovr-54)*250;if(state.cash<trainingCost){$("message").textContent="Você precisa de "+money(trainingCost)+" para treinar. Ganhe salários e bônus para juntar dinheiro.";return}state.cash-=trainingCost;const improved=Math.random()<0.65&&state.ovr<99;if(improved)state.ovr++;addLog(improved?"Treino concluído: Overall +1.":"Treino concluído, mas sem evolução desta vez.");$("message").textContent=improved?"Treino difícil concluído! Overall +1.":"Treino concluído, mas você não evoluiu. Tente novamente.";render()});
+$("offer").addEventListener("click",generateContracts);
+$("reset").addEventListener("click",()=>{
+ if(!confirm("Tem certeza de que deseja reiniciar a carreira? Todo o progresso salvo será perdido."))return;
+ try{localStorage.removeItem("footballCareerSave")}catch(e){/* O reinício continua mesmo sem armazenamento disponível. */}
+ state={fame:0,ovr:55,cash:0,club:"Sem clube",matches:0,wins:0,contracts:[],assets:[],log:["Você assinou como agente livre e começou com 0 de Fama."],name:"Novo Craque",position:"Atacante"};
+ $("playerName").value="Novo Craque";
+ $("position").value="Atacante";
+ $("league").value="all";
+ render();
+ $("message").textContent="Progresso reiniciado! Sua nova carreira começa agora.";
+});
+const luxuryItems={mansao:{name:"Mansão",price:25000000},ilha:{name:"Ilha particular",price:500000000},carro:{name:"Supercarro",price:8000000},colecao:{name:"Coleção de carros",price:75000000},iate:{name:"Iate de luxo",price:120000000},jato:{name:"Jato particular",price:250000000}};
+document.addEventListener("click",event=>{const btn=event.target.closest("button[data-buy]");if(!btn)return;const item=luxuryItems[btn.dataset.buy];if(!item)return;state.assets=state.assets||[];if(state.assets.includes(item.name)){ $("message").textContent="Você já possui: "+item.name+".";return;}if(state.cash<item.price){$("message").textContent="Dinheiro insuficiente! "+item.name+" custa "+money(item.price)+".";return;}state.cash-=item.price;state.assets.push(item.name);addLog("Comprou "+item.name+" por "+money(item.price)+".");$("message").textContent="Parabéns! Você comprou: "+item.name+".";render();});
+$("teams").innerHTML=Object.entries(clubs).map(([l,ts])=>`<div style="width:100%;margin-top:8px"><b>${esc(l)}</b><div class="teamlist">${ts.map(t=>`<span class="pill">${esc(t)}</span>`).join("")}</div></div>`).join("");
+render();
+// Confirma que os controles estão ligados após o carregamento do documento.
+["play","train","offer","reset"].forEach(id=>{const el=$(id);if(el)el.disabled=false});
+</script></body></html>
